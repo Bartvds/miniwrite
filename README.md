@@ -4,20 +4,21 @@
 
 > Minimal semantic output styler/writer API with default implementations.
 
-A simple pluggable output writer and styler/coloriser to embed in (development) tools and reporters. Offer a standard interface for customisable styled text output. The minimalistic semantic API allows for easy partial methods overwrites to suit any environment.
+A simple pluggable output writer and styler/coloriser interface to embed in (development) tools and reporters. Offer a standard interface for customisable styled text output. The minimalistic semantic API allows for easy partial methods overwrites to suit any environment.
 
 **Note:** Experimental abstraction but concept is organically grown over many reporter projects.
 
 ## Usage pattern
 
-* Module authors expose an initialisation step where consumers can supply their own `miniwrite` instances.
+* Module authors expose an initialisation step where consumers can supply their own `miniwrite` compatible instances.
 * Module users define their own `miniwrite` instance to control the output modes of various tools.
-* Adapting to alternate (real) streams is as easy as overwriting the `mw.writeln()` of any bundled preset.
+* Adapt to alternate (real) streams by overwriting the `mw.writeln()` of any bundled preset.
 * Creative developers can rig `miniwrite` for practical solutions.
-	* For example use the bundled splitter/buffer adapters to route or assert output: use a plain text for assertions, a fancy color mode as display while logging to HTML file for later review.
+	* For example use the bundled splitter/buffer adapters to route or assert output
+		* Use a plain text for assertions, a fancy color mode as display, while logging to HTML file for later review.
+		* All intercepted at low-level semantic.
 
-
-Keep in mind:  
+**Keep in mind:**
 
 * Miniwrite is not a logging framework (use `miniwrite` to compose one)
 * Miniwrite is not a full featured semantic output framework (use `miniwrite` to compose one)
@@ -64,13 +65,13 @@ Buffer writes
 ````js
 // buffer own lines
 var mw = miniwrite.createBuffered();
-// buffer other Writes (handy for testing)
+// buffer other writes (handy for testing)
 var mw = miniwrite.createBuffered(myMiniWrite);
 
 // get buffer
 var str = mw.toString();
 var str = mw.toString('\n\n', '\t');
-// iterate buffer
+// iterate buffer if you must
 mw.lines.forEach(function(line) {
 	//..
 })
@@ -81,8 +82,8 @@ mw.clear();
 Split method calls over instances
 ````js
 var mw = miniwrite.createSplitter([myANSIConsole, myRemoteSocket, myDiskLogger]);
-mw.targets.forEach(function(subw) {
-	//..
+mw.targets.forEach(function(subw, num) {
+	//.. 
 });
 ````
 
@@ -103,8 +104,9 @@ Convenience preset for [grunt](https://github.com/gruntjs/grunt) (same as in `gr
 ````js
 var mw = miniwrite.createGrunt(grunt);
 ````
+## Examples
 
-Example: make it bigger:
+Make it bigger:
 ````js
 var mw = miniwrite.createConsole();
 mw.accent = function(str) {
@@ -112,19 +114,43 @@ mw.accent = function(str) {
 };
 ````
 
-Example: extend with custom output-stream:
+Extend with custom output-stream:
 ````js
 var mw = miniwrite.createBase();
 mw.writeln = function(line) {
 	myWebSocketHyperStream.send({line: line})
 };
 // pass to supporting tools
-awesomeModule.useMiniWrite(mw);
+awesomeModule.useMiniWritePlz(mw);
 ````
 
-Example: tap into output
+Tap into output
 ````js
 awesomeModule.write = miniwrite.createSplitter([myMiniWrite, awesomeModule.write]);
+````
+
+Build your own:
+````js
+var obj = {
+	writeln: function (line) {
+		// write
+	},
+	success: function (str) {
+		return str;
+	},
+	accent: function (str) {
+		return str;
+	},
+	warning: function (str) {
+		return str;
+	},
+	error: function (str) {
+		return str;
+	},
+	muted: function (str) {
+		return str;
+	}
+};
 ````
 
 ## Installation
@@ -159,7 +185,7 @@ See the `Gruntfile.js` for additional commands.
 
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
-*Note:* please create a [ticket](https://github.com/Bartvds/miniwrite/issues) to discuss big changes. Pull requests for bug fixes are of course always welcome. always welcome. 
+*Note:* this is an opinionated module: please create a [ticket](https://github.com/Bartvds/miniwrite/issues) to discuss any big ideas. Pull requests for bug fixes are of course always welcome. 
 
 ## License
 
