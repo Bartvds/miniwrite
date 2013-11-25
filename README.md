@@ -4,9 +4,9 @@
 
 > Minimal semantic output styler/writer API with default implementations.
 
-A simple pluggable output writer and styler/coloriser interface to embed in (development) tools and reporters. Offer a standard interface for customisable styled text output. The minimalistic semantic API allows for easy partial methods overwrites to suit any environment.
+A pluggable output writer and styler/coloriser interface to embed in (development) tools and reporters. Offers a standard interface for customisable styled text output. The minimalistic semantic API allows for partial methods overwrites to suit any environment.
 
-**Note:** Experimental abstraction but concept is organically grown over many reporter projects.
+**Note:** Experimental abstraction but organically grown over many reporter projects.
 
 ## Usage pattern
 
