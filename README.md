@@ -2,75 +2,33 @@
 
 [![Build Status](https://secure.travis-ci.org/Bartvds/miniwrite.png?branch=master)](http://travis-ci.org/Bartvds/miniwrite) [![Dependency Status](https://gemnasium.com/Bartvds/miniwrite.png)](https://gemnasium.com/Bartvds/miniwrite) [![NPM version](https://badge.fury.io/js/miniwrite.png)](http://badge.fury.io/js/miniwrite)
 
-> Minimal semantic output styler/writer API with default implementations.
+> Minimal output-stream writer API. 
 
-A pluggable output writer and styler/coloriser interface to embed in (development) tools and reporters. Offers a standard interface for customisable styled text output. The minimalistic semantic API allows for partial methods overwrites to suit any environment.
-
-**Note:** Experimental abstraction but organically grown over many reporter projects.
-
-## Usage pattern
-
-* Module authors expose an initialisation step where consumers can supply their own `miniwrite` compatible instances.
-* Module users define their own `miniwrite` instance to control the output modes of various tools.
-* Adapt to alternate (real) streams by overwriting the `mw.writeln()` of any bundled preset.
-* Creative developers can rig `miniwrite` for practical solutions.
-	* For example use the bundled splitter/buffer adapters to route or assert output
-		* Use a plain text for assertions, a fancy color mode as display, while logging to HTML file for later review.
-		* All intercepted at low-level semantic.
-
-**Keep in mind:**
-
-* Miniwrite is not a logging framework (use `miniwrite` to compose one)
-* Miniwrite is not a full featured semantic output framework (use `miniwrite` to compose one)
-* Miniwrite is not a string formatter or `printf` alternate (if needed this happens before `miniwrite` is called)
+A pluggable output writer interface to embed/expose in tools and reporters. 
 
 ## API
 
 Main usage:
 ````js
-// let's use a Node.js compatible console.log() + ANSI colors 
-var mw = miniwrite.createANSI();
+// simplified node.js.browser compatible console.log()
+var mw = miniwrite.console();
 
 // write plain text line
-mw.writeln('plain in the rain');
-mw.writeln('');
-
-// semantic stylers and color conventions
-var str = mw.success('good green');
-var str = mw.accent('flashy cyan');
-var str = mw.warning('annoying yellow');
-var str = mw.error('bad red');
-var str = mw.muted('ignorable grey');
-
-// combine to write stylized output
-mw.writeln('this is ' + mw.success('very amaze'));
+mw.writeln('hello world!');
 ````
 
-Common:
-````js
-// stream plain text via console.log()
-var mw = miniwrite.createConsole();
+## Helpers
 
-// stream ANSI code via console.log();
-var mw = miniwrite.createANSI();
-
-// extend existing
-var mw = miniwrite.createANSI(myMiniWrite);
-
-// get basic prototype for extension
-var mw = miniwrite.createBase();
-````
-
-Buffer writes
+Buffer writes:
 ````js
 // buffer own lines
-var mw = miniwrite.createBuffered();
+var mw = miniwrite.buffer();
 // buffer other writes (handy for testing)
-var mw = miniwrite.createBuffered(myMiniWrite);
+var mw = miniwrite.buffer(myMiniWrite);
 
 // get buffer
-var str = mw.toString();
-var str = mw.toString('\n\n', '\t');
+var str = mw.concat();
+var str = mw.concat('\n\n', '\t');
 // iterate buffer if you must
 mw.lines.forEach(function(line) {
 	//..
@@ -79,44 +37,45 @@ mw.lines.forEach(function(line) {
 mw.clear();
 ````
 
-Split method calls over instances
+Adpater to buffer character writes via `write()`:
 ````js
-var mw = miniwrite.createSplitter([myANSIConsole, myRemoteSocket, myDiskLogger]);
+var mw = miniwrite.lineBuffer(miniwrite.console());
+
+// write plain text line
+mw.write('hello');
+mw.write(' ');
+mw.writeln('world!');
+
+mw.write('one');
+mw.write('two');
+mw.flush();
+````
+
+Split write calls:
+````js
+var mw = miniwrite.splitter([myANSIConsole, myRemoteSocket, myDiskLogger]);
 mw.targets.forEach(function(subw, num) {
 	//.. 
 });
+mw.targets
 ````
 
-Proxy to toggle stream or swap output target
+Proxy to toggle stream or swap output target:
 ````js
-var mw = miniwrite.createProxy(myMiniWrite);
+var mw = miniwrite.proxy(myMiniWrite);
 mw.target = myOherWrite;
 mw.enabled = false;
 ````
 
-Convenience preset for conventional [colors.js](https://github.com/Marak/colors.js)
-````js
-var mw = miniwrite.createColorsJS();
-var mw = miniwrite.createColorsJS(myMiniWrite);
-````
-
 Convenience preset for [grunt](https://github.com/gruntjs/grunt) (same as in `grunt ~0.4.1`):
 ````js
-var mw = miniwrite.createGrunt(grunt);
+var mw = miniwrite.grunt(grunt);
 ````
 ## Examples
 
-Make it bigger:
+Custom output-stream:
 ````js
-var mw = miniwrite.createConsole();
-mw.accent = function(str) {
-	return str.toUpperCase()
-};
-````
-
-Extend with custom output-stream:
-````js
-var mw = miniwrite.createBase();
+var mw = {};
 mw.writeln = function(line) {
 	myWebSocketHyperStream.send({line: line})
 };
@@ -126,31 +85,7 @@ awesomeModule.useMiniWritePlz(mw);
 
 Tap into output
 ````js
-awesomeModule.write = miniwrite.createSplitter([myMiniWrite, awesomeModule.write]);
-````
-
-Build your own:
-````js
-var obj = {
-	writeln: function (line) {
-		// write
-	},
-	success: function (str) {
-		return str;
-	},
-	accent: function (str) {
-		return str;
-	},
-	warning: function (str) {
-		return str;
-	},
-	error: function (str) {
-		return str;
-	},
-	muted: function (str) {
-		return str;
-	}
-};
+awesomeModule.writer = miniwrite.splitter([awesomeModule.writer, myMiniWrite]);
 ````
 
 ## Installation
@@ -160,11 +95,12 @@ Not yet published to package managers.
 Link to a github commit if you feel adventurous.
 
 ```shell
-$ npm install tv4-reporter --save-dev
+$ npm install miniwrite --save-dev
 ```
 
 ## History
 
+* 0.1.0 - Extracted styling to [ministyle](https://github.com/Bartvds/ministyle).
 * 0.0.1 - Extracted code from [tv4-reporter](https://github.com/Bartvds/tv4-reporter) et al.
 
 ## Build
