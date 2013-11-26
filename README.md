@@ -37,9 +37,9 @@ mw.lines.forEach(function(line) {
 mw.clear();
 ````
 
-Adpater to buffer character writes via `write()`:
+Adapter to buffer character writes via `mw.write(chars)`, auto-flushes on newlines:
 ````js
-var mw = miniwrite.lineBuffer(miniwrite.console());
+var mw = miniwrite.chars(miniwrite.console());
 
 // write plain text line
 mw.write('hello');
@@ -48,23 +48,32 @@ mw.writeln('world!');
 
 mw.write('one');
 mw.write('two');
-mw.flush();
+mw.flush(true);
 ````
 
-Split write calls:
+Spread of multiple writers
 ````js
-var mw = miniwrite.splitter([myANSIConsole, myRemoteSocket, myDiskLogger]);
+var mw = miniwrite.multi([myANSIConsole, myRemoteSocket, myDiskLogger]);
+mw.enabled = true;
 mw.targets.forEach(function(subw, num) {
 	//.. 
 });
-mw.targets
+````
+
+Proxy to toggle stream or swap output target:
+````js
+var mw = miniwrite.peek(myMiniWrite, callback);
+mw.enabled = true;
+mw.target = myOherWrite;
+mw.callback = function(line) // string ,or false to ignore
 ````
 
 Proxy to toggle stream or swap output target:
 ````js
 var mw = miniwrite.proxy(myMiniWrite);
+mw.enabled = true;
 mw.target = myOherWrite;
-mw.enabled = false;
+mw.target = myOherWrite;
 ````
 
 Convenience preset for [grunt](https://github.com/gruntjs/grunt) (same as in `grunt ~0.4.1`):
