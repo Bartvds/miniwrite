@@ -14,8 +14,12 @@
 	"node": true,
 	"browser": true,
 	"globals": {
-		"describe": true,
 		"it": true,
+		"describe": true,
+		"before": true,
+		"beforeEach": true,
+		"after": true,
+		"afterEach": true,
 		"tv4": true,
 		"define": true,
 		"chai": true,

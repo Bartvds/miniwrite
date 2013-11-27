@@ -4,7 +4,9 @@
 
 > Minimal output-stream writer API. 
 
-A pluggable output writer interface to embed/expose in tools and reporters. 
+A pluggable output writer interface/adapter to embed/expose in tools and reporters, also a simplified stream.  
+
+This s not a logging framework or full console or stream replacement. Instead this is an abstraction to build on in other tools. Intend as companion to [ministyle](https://github.com/Bartvds/ministyle) (et al).
 
 ## API
 
@@ -56,7 +58,7 @@ Spread of multiple writers
 var mw = miniwrite.multi([myANSIConsole, myRemoteSocket, myDiskLogger]);
 mw.enabled = true;
 mw.targets.forEach(function(subw, num) {
-	//.. 
+	// .. 
 });
 ````
 
@@ -65,7 +67,9 @@ Proxy to toggle stream or swap output target:
 var mw = miniwrite.peek(myMiniWrite, callback);
 mw.enabled = true;
 mw.target = myOherWrite;
-mw.callback = function(line) // string ,or false to ignore
+mw.callback = function(line) {
+	// return string, or false to ignore
+});
 ````
 
 Proxy to toggle stream or swap output target:
@@ -82,7 +86,7 @@ var mw = miniwrite.grunt(grunt);
 ````
 ## Examples
 
-Custom output-stream:
+Build your own:
 ````js
 var mw = {};
 mw.writeln = function(line) {
@@ -110,11 +114,9 @@ $ npm install miniwrite --save-dev
 ## History
 
 * 0.1.0 - Extracted styling to [ministyle](https://github.com/Bartvds/ministyle).
-* 0.0.1 - Extracted code from [tv4-reporter](https://github.com/Bartvds/tv4-reporter) et al.
+* 0.0.1 - Extracted code from existing projects
 
 ## Build
-
-Nothing much here as the code is still being hammered out.
 
 ~~Install development dependencies in your git checkout:~~
 
