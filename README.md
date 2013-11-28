@@ -6,7 +6,7 @@
 
 A pluggable output writer interface/adapter to embed/expose in tools and reporters, also a simplified stream.  
 
-This s not a logging framework or full console or stream replacement. Instead this is an abstraction to build on in other tools. Intend as companion to [ministyle](https://github.com/Bartvds/ministyle) (et al).
+This is not a logging framework or full console or stream replacement. Instead this is an abstraction to build on or expose in other tools. Intend as companion to [ministyle](https://github.com/Bartvds/ministyle) (et al).
 
 ## API
 
@@ -101,11 +101,7 @@ Tap into output
 awesomeModule.writer = miniwrite.splitter([awesomeModule.writer, myMiniWrite]);
 ````
 
-## Installation
-
-Not yet published to package managers. 
-
-Link to a github commit if you feel adventurous.
+## Installation 
 
 ```shell
 $ npm install miniwrite --save-dev
@@ -118,11 +114,11 @@ $ npm install miniwrite --save-dev
 
 ## Build
 
-~~Install development dependencies in your git checkout:~~
+Install development dependencies in your git checkout:
 
     $ npm install
 
-~~Build and run tests:~~
+~Build and run tests:
 
     $ grunt
 
