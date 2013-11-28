@@ -18,9 +18,14 @@ function writeJSON(src, value) {
 	grunt.file.write(src, JSON.stringify(value, null, '\t'));
 }
 
+function printJSON(value) {
+	console.log(JSON.stringify(value, null, '\t'));
+}
+
 module.exports = {
 	readJSON: readJSON,
 	writeJSON: writeJSON,
+	printJSON: printJSON,
 	chai: chai,
 	assert: assert
 };

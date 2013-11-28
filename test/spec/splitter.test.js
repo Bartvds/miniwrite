@@ -1,4 +1,4 @@
-describe('basics', function () {
+describe('splitter', function () {
 	'use strict';
 
 	var helper = require('../helper');
@@ -9,32 +9,78 @@ describe('basics', function () {
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	var write;
+	var check;
+
+	beforeEach(function () {
+		check = miniwrite.buffer();
+		write = miniwrite.splitter(check);
+		miniwrite.assertMiniWrite(write);
+	});
 
 	afterEach(function () {
 		write = null;
+		check = null;
 	});
 
-	describe('buffer', function () {
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		beforeEach(function () {
-			write = miniwrite.buffer();
-		});
+	it('splits lines', function () {
+		write.writeln('a\nbb');
+		assert.deepEqual(check.lines, ['a', 'bb']);
 	});
 
-	describe('splitter', function () {
-
-		beforeEach(function () {
-			write = miniwrite.splitter(miniwrite.buffer());
+	describe('xnix', function () {
+		it('splits', function () {
+			write.writeln('a\nbb\n\nccc');
+			assert.deepEqual(check.lines, ['a', 'bb', '', 'ccc']);
 		});
 
-		it('splits linux lines', function () {
+		it('splits leading', function () {
+			write.writeln('\na\nbb\n\nccc');
+			assert.deepEqual(check.lines, ['', 'a', 'bb', '', 'ccc']);
+		});
+
+		it('splits trailing', function () {
 			write.writeln('a\nbb\n\nccc\n');
-			assert.deepEqual(write.target.lines, ['a', 'bb', '', 'ccc', '']);
+			assert.deepEqual(check.lines, ['a', 'bb', '', 'ccc', '']);
+		});
+	});
+
+	describe('windows', function () {
+		it('splits', function () {
+			write.writeln('a\r\nbb\r\n\r\nccc');
+			assert.deepEqual(check.lines, ['a', 'bb', '', 'ccc']);
 		});
 
-		it('splits windows lines', function () {
-			write.writeln('a\r\nbb\r\n\r\nccc\r\n');
-			assert.deepEqual(write.target.lines, ['a', 'bb', '', 'ccc', '']);
+		it('splits leading', function () {
+			write.writeln('\r\na\r\nbb\r\n\r\nccc');
+			assert.deepEqual(check.lines, ['', 'a', 'bb', '', 'ccc']);
 		});
+
+		it('splits trailing', function () {
+			write.writeln('a\r\nbb\r\n\r\nccc\r\n');
+			assert.deepEqual(check.lines, ['a', 'bb', '', 'ccc', '']);
+		});
+	});
+
+	describe('mixed', function () {
+		it('splits', function () {
+			write.writeln('a\r\n\nbb\r\n\r\nccc\r\n');
+			assert.deepEqual(check.lines, ['a', '', 'bb', '', 'ccc', '']);
+		});
+	});
+
+	//TODO old mac?
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+	it('mutes on enabled', function () {
+		assert.isTrue(write.enabled);
+		write.writeln('aa');
+		write.enabled = false;
+		write.writeln('bb');
+		write.enabled = true;
+		write.writeln('cc');
+		assert.deepEqual(check.lines, ['aa', 'cc']);
 	});
 });
