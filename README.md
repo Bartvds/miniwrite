@@ -35,7 +35,7 @@ var str = mw.concat('\n\n', '\t');
 mw.lines.forEach(function(line) {
 	//..
 })
-// reset buffer
+// clear buffer
 mw.clear();
 ````
 
@@ -46,11 +46,19 @@ var mw = miniwrite.chars(miniwrite.console());
 // write plain text line
 mw.write('hello');
 mw.write(' ');
-mw.writeln('world!');
+mw.writeln('world!'); // "hello world\n"
 
+//or accumulate chars
 mw.write('one');
 mw.write('two');
-mw.flush(true);
+mw.flush(true); // onetwo
+
+// clear buffer
+mw.write('one');
+mw.clear();
+mw.write('two');
+mw.flush(true); // two
+
 ````
 
 Spread of multiple writers

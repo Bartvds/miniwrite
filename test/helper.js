@@ -14,6 +14,14 @@ function readJSON(src) {
 	return {};
 }
 
+function readFile(src) {
+	if (grunt.file.exists(src)) {
+		return grunt.file.read(src);
+	}
+	console.log('mssing file: ' + src);
+	return '';
+}
+
 function writeJSON(src, value) {
 	grunt.file.write(src, JSON.stringify(value, null, '\t'));
 }
@@ -24,6 +32,7 @@ function printJSON(value) {
 
 module.exports = {
 	readJSON: readJSON,
+	readFile: readFile,
 	writeJSON: writeJSON,
 	printJSON: printJSON,
 	chai: chai,

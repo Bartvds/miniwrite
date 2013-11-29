@@ -75,6 +75,14 @@ describe('chars', function () {
 		assert.deepEqual(check.lines, ['aabbcc']);
 	});
 
+	it('drops buffer after clear()', function () {
+		write.write('aa');
+		write.write('bb');
+		write.clear();
+		write.writeln('cc');
+		assert.deepEqual(check.lines, ['cc']);
+	});
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	it('mutes on enabled', function () {
