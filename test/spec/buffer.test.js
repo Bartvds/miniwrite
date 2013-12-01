@@ -60,6 +60,8 @@ describe('buffer', function () {
 		assert.deepEqual(write.lines, ['a\r\nbb\r\n\r\nccc']);
 	});
 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 	it('get single line string', function () {
 		write.writeln('a');
 		assert.strictEqual(write.concat(), 'a\n');
@@ -79,6 +81,17 @@ describe('buffer', function () {
 		write.writeln('');
 		write.writeln('ccc');
 		assert.strictEqual(write.concat('X', '_'), '_aX_b bX_X_cccX');
+	});
+
+	it('get concatenated lines sepAfter', function () {
+		write.writeln('a');
+		write.writeln('b b');
+		assert.strictEqual(write.concat('X', '_', true), '_aX_b bX');
+	});
+	it('get concatenated lines no sepAfter', function () {
+		write.writeln('a');
+		write.writeln('b b');
+		assert.strictEqual(write.concat('X', '_', false), '_aX_b b');
 	});
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

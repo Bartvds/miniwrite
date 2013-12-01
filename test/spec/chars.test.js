@@ -46,6 +46,18 @@ describe('chars', function () {
 		assert.deepEqual(check.lines, ['aa', 'bb', 'cc']);
 	});
 
+	it('flushes on linebreak', function () {
+		write.write('aa\nbb\ncc\n');
+		assert.deepEqual(check.lines, ['aa', 'bb', 'cc']);
+	});
+
+	it('flushes on custom split', function () {
+		write = miniwrite.chars(check, /(.*?) +/g);
+		write.write('aa bb cc');
+		write.flush();
+		assert.deepEqual(check.lines, ['aa', 'bb', 'cc']);
+	});
+
 	it('flushes mixed buffered chars with writeln()', function () {
 		write.write('aa');
 		write.writeln('');

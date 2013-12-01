@@ -100,12 +100,8 @@ describe('disk', function () {
 					return;
 				}
 				var lines = queue.shift();
-				console.log('lines');
-				console.log(lines);
 				if (!lines) {
-					console.log('flush');
 					disk.flush(function () {
-						console.log('done flush');
 						step(callback);
 					});
 					return;
@@ -122,11 +118,11 @@ describe('disk', function () {
 				done(err);
 				return;
 			}
-			disk.flush(function (err) {
+			disk.flush(function () {
 				var expected = check.concat(separator);
 				var actual = helper.readFile(dest);
 				assert.strictEqual(actual, expected);
-				done(err);
+				done();
 			});
 		});
 	});

@@ -29,6 +29,13 @@ describe('splitter', function () {
 		assert.deepEqual(check.lines, ['a', 'bb']);
 	});
 
+	it('splits on custom split', function () {
+		write = miniwrite.chars(check, /(.*?) +/g);
+		write.write('aa bb cc');
+		write.flush();
+		assert.deepEqual(check.lines, ['aa', 'bb', 'cc']);
+	});
+
 	describe('xnix', function () {
 		it('splits', function () {
 			write.writeln('a\nbb\n\nccc');
