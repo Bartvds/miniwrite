@@ -1,35 +1,45 @@
 describe('toggle', function () {
 	'use strict';
 
-/*	var helper = require('../helper');
+	var helper = require('../helper');
 	var assert = helper.assert;
 
-	var miniwrite = require('../../lib/miniwrite');
+	var miniwrite = require('../../lib');
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 	var write;
-	var one;
-	var two;
+	var check;
+	var originalLog;
 
 	describe('console', function () {
 		beforeEach(function () {
-			one = miniwrite.buffer();
-			two = miniwrite.buffer();
-			write = miniwrite.console();
+			check = miniwrite.buffer();
+			write = miniwrite.log();
 			miniwrite.assertMiniWrite(write);
+
+			originalLog = console.log;
+			console.log = function (str) {
+				check.writeln(str);
+			};
 		});
 
 		afterEach(function () {
+			console.log = originalLog;
+			originalLog = null;
+
 			write = null;
-			one = null;
-			two = null;
+			check = null;
 		});
 
 		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		it('mutes on enabled', function () {
-
+		it('writes to console.log ', function () {
+			write.writeln('a');
+			write.writeln('b b');
+			write.writeln('ccc');
+			assert.lengthOf(check.lines, 3);
+			assert.deepEqual(check.lines, ['a', 'b b', 'ccc']);
 		});
 
 		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -41,10 +51,9 @@ describe('toggle', function () {
 			write.writeln('bb');
 			write.enabled = true;
 			write.writeln('cc');
-			assert.deepEqual(one.lines, ['aa', 'cc']);
-			assert.deepEqual(two.lines, []);
+			assert.deepEqual(check.lines, ['aa', 'cc']);
 		});
 	});
-*/
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 });

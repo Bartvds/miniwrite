@@ -4,8 +4,7 @@ describe('disk', function () {
 	var helper = require('../helper');
 	var assert = helper.assert;
 
-	var miniwrite = require('../../lib/miniwrite');
-	var miniio = require('../../lib/io');
+	var miniwrite = require('../../lib');
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -23,7 +22,7 @@ describe('disk', function () {
 	function diskTest(name, lines, seperator, done) {
 		var dest = getDest(name);
 		var check = miniwrite.buffer();
-		var disk = miniio.disk(dest, seperator);
+		var disk = miniwrite.disk(dest, seperator);
 		miniwrite.assertMiniWrite(disk);
 
 		var multi = miniwrite.multi([check, disk]);
@@ -44,7 +43,7 @@ describe('disk', function () {
 
 	it('basics', function () {
 		var dest = getDest('basic');
-		var disk = miniio.disk(getDest('basic'));
+		var disk = miniwrite.disk(getDest('basic'));
 		miniwrite.assertMiniWrite(disk);
 		assert.strictEqual(disk.file, dest);
 		assert.strictEqual(disk.linebreak, '\n');
@@ -76,7 +75,7 @@ describe('disk', function () {
 		var dest = getDest('async');
 		var separator = '\n';
 		var check = miniwrite.buffer();
-		var disk = miniio.disk(dest, separator);
+		var disk = miniwrite.disk(dest, separator);
 		var multi = miniwrite.multi([check, disk]);
 
 		var queue = [
@@ -133,7 +132,7 @@ describe('disk', function () {
 		var dest = getDest('mutes');
 		var separator = '\n';
 		var check = miniwrite.buffer();
-		var disk = miniio.disk(dest, separator);
+		var disk = miniwrite.disk(dest, separator);
 		var multi = miniwrite.multi([check, disk]);
 		assert.isTrue(multi.enabled);
 

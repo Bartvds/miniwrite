@@ -117,6 +117,7 @@ $ npm install miniwrite --save-dev
 
 ## History
 
+* 0.1.2 - Enabled strict mode, split in internal modules
 * 0.1.0 - Extracted styling to [ministyle](https://github.com/Bartvds/ministyle).
 * 0.0.1 - Extracted code from existing projects
 

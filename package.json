@@ -28,7 +28,7 @@
     "adapter",
     "writer"
   ],
-  "main": "lib/miniwrite.js",
+  "main": "lib/",
   "engines": {
     "node": ">= 0.8.0"
   },

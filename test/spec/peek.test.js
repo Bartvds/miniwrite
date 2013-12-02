@@ -4,7 +4,7 @@ describe('peek', function () {
 	var helper = require('../helper');
 	var assert = helper.assert;
 
-	var miniwrite = require('../../lib/miniwrite');
+	var miniwrite = require('../../lib');
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
