@@ -112,7 +112,7 @@ awesomeModule.writer = miniwrite.splitter([awesomeModule.writer, myMiniWrite]);
 ## Installation 
 
 ```shell
-$ npm install miniwrite --save-dev
+$ npm install miniwrite --save
 ```
 
 ## History
