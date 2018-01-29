@@ -13,7 +13,7 @@ This is not a logging framework or full console or stream replacement. Instead t
 Main usage:
 ````js
 // simplified node.js.browser compatible console.log()
-var mw = miniwrite.console();
+var mw = miniwrite.log();
 
 // write plain text line
 mw.writeln('hello world!');
@@ -41,7 +41,7 @@ mw.clear();
 
 Adapter to buffer character writes via `mw.write(chars)`, auto-flushes on newlines:
 ````js
-var mw = miniwrite.chars(miniwrite.console());
+var mw = miniwrite.chars(miniwrite.log());
 
 // write plain text line
 mw.write('hello');
